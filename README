@@ -3,7 +3,7 @@ SSD1306 i2c driver for wiringPi
 
 Based on Adafruit SSD1306 Arduino library. Some functions came from Adafruit GF$
 
-Tested on Banana Pi with 0.42 White OLED
+Tested on Banana Pi M5(BPI S905x3) with 0.42 White OLED
 
 Required WiringPi http://wiringpi.com/ and WiringPi i2c lib. 
 
