@@ -203,6 +203,16 @@ void ssd1306_begin(unsigned int vccstate, unsigned int i2caddr)
 		ssd1306_command(0xCF);
 	}
 
+#elif defined SSD1306_72_40
+	ssd1306_command(SSD1306_SETCOMPINS);	// 0xDA
+	ssd1306_command(0x12);
+	ssd1306_command(SSD1306_SETCONTRAST);	// 0x81
+	if (vccstate == SSD1306_EXTERNALVCC) {
+		ssd1306_command(0x9F);
+	} else {
+		ssd1306_command(0xCF);
+	}
+
 #elif defined SSD1306_96_16
 	ssd1306_command(SSD1306_SETCOMPINS);	// 0xDA
 	ssd1306_command(0x2);	// ada x12
@@ -248,14 +258,43 @@ void ssd1306_command(unsigned int c)
 
 void ssd1306_display(void)
 {
+	// 解开下面注释可以为屏幕周围画直线边框
+	//memset(buffer, 0, sizeof(buffer));
+	// buffer[0]=0xFF;buffer[WIDTH-1]=0xFF;
+	// buffer[WIDTH]=0xFF;buffer[WIDTH*2-1]=0xFF;
+	// buffer[WIDTH*2]=0xFF;buffer[WIDTH*3-1]=0xFF;
+	// buffer[WIDTH*3]=0xFF;buffer[WIDTH*4-1]=0xFF;
+	// buffer[WIDTH*4]=0xFF;buffer[WIDTH*5-1]=0xFF;
+	// for(int i=0;i<WIDTH;i++)buffer[i] |= 0x1;
+	// for(int i=0;i<WIDTH;i++)buffer[WIDTH*4+i] |= 0x80;
+    char *pBuf = (char *)buffer;
+
+	for (int page = 0; page < 5; page++)
+	{
+		// set page address
+		ssd1306_command(0xB0 + page);
+		// set low column address mode
+		ssd1306_command(0x0c);
+		// set high column address mode
+		ssd1306_command(0x11);
+		// write data
+		for (int i = 0; i < WIDTH; i++)
+		{
+			wiringPiI2CWriteReg8(i2cd, 0x40, buffer[i + page * WIDTH]);
+		}
+	}
+	return;
 	ssd1306_command(SSD1306_COLUMNADDR);
 	ssd1306_command(0);	// Column start address (0 = reset)
-	ssd1306_command(SSD1306_LCDWIDTH - 1);	// Column end address (127 
+	ssd1306_command(WIDTH-1);	// Column end address (127 
 	// = reset)
 
 	ssd1306_command(SSD1306_PAGEADDR);
 	ssd1306_command(0);	// Page start address (0 = reset)
 #if SSD1306_LCDHEIGHT == 64
+	ssd1306_command(7);	// Page end address
+#endif
+#if SSD1306_LCDHEIGHT == 40
 	ssd1306_command(7);	// Page end address
 #endif
 #if SSD1306_LCDHEIGHT == 32
@@ -268,10 +307,24 @@ void ssd1306_display(void)
 	// I2C
 	int i;
 	for (i = 0; i < (SSD1306_LCDWIDTH * SSD1306_LCDHEIGHT / 8); i++) {
-		wiringPiI2CWriteReg8(i2cd, 0x40, buffer[i]); 
+		wiringPiI2CWriteReg8(i2cd, 0x40, 0xAA); 
 		//This sends byte by byte. 
 		//Better to send all buffer without 0x40 first
 		//Should be optimized
+	}
+	ssd1306_command(SSD1306_PAGEADDR);
+	ssd1306_command(0);	// Page start address (0 = reset)
+	ssd1306_command(7);	// Page end address
+
+	for (i = 0; i < (SSD1306_LCDWIDTH * SSD1306_LCDHEIGHT / 8); i++) {
+		wiringPiI2CWriteReg8(i2cd, 0x40, 0xAA);
+	}
+	ssd1306_command(SSD1306_PAGEADDR);
+	ssd1306_command(50);	// Page start address (0 = reset)
+	ssd1306_command(7);	// Page end address
+
+	for (i = 0; i < (SSD1306_LCDWIDTH * SSD1306_LCDHEIGHT / 8); i++) {
+		wiringPiI2CWriteReg8(i2cd, 0x40, 0xAA);
 	}
 }
 
