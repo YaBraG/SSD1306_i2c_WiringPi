@@ -47,19 +47,25 @@ All text above, and the splash screen must be included in any redistribution
     SSD1306_96_16
 
     -----------------------------------------------------------------------*/
-#define SSD1306_128_64
+//   #define SSD1306_128_64
 //   #define SSD1306_128_32
+#define SSD1306_72_40
 //   #define SSD1306_96_16
 /*=========================================================================*/
+
+#if defined SSD1306_128_64
+        #define WIDTH 128
+        #define HEIGHT 64
+#endif
 
 #if defined SSD1306_128_32
         #define WIDTH 128
         #define HEIGHT 32
 #endif
 
-#if defined SSD1306_128_64
-        #define WIDTH 128
-        #define HEIGHT 64
+#if defined SSD1306_72_40
+        #define WIDTH 72
+        #define HEIGHT 40
 #endif
 
 #if defined SSD1306_96_16
@@ -70,7 +76,7 @@ All text above, and the splash screen must be included in any redistribution
 #if defined SSD1306_128_64 && defined SSD1306_128_32
         #error "Only one SSD1306 display can be specified at once in SSD1306.h"
 #endif
-#if !defined SSD1306_128_64 && !defined SSD1306_128_32 && !defined SSD1306_96_16
+#if !defined SSD1306_128_64 && !defined SSD1306_128_32 && !defined SSD1306_96_16 && !defined SSD1306_72_40
         #error "At least one SSD1306 display must be specified in SSD1306.h"
 #endif
 
@@ -81,6 +87,10 @@ All text above, and the splash screen must be included in any redistribution
 #if defined SSD1306_128_32
         #define SSD1306_LCDWIDTH                  128
         #define SSD1306_LCDHEIGHT                 32
+#endif
+#if defined SSD1306_72_40
+        #define SSD1306_LCDWIDTH                  72
+        #define SSD1306_LCDHEIGHT                 40
 #endif
 #if defined SSD1306_96_16
         #define SSD1306_LCDWIDTH                  96
