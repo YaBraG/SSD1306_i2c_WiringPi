@@ -12,7 +12,8 @@ void main() {
 	ssd1306_clearDisplay();
 	delay(5000);
 
-	char* text = "This is demo for SSD1306 i2c driver for Raspberry Pi";
+	char text[100];
+	sprintf(text, "1306 %dx%d\ni2c driver\nwith wiringPi", WIDTH, HEIGHT);
 	ssd1306_drawString(text);
 	ssd1306_display();
 	delay(5000);
