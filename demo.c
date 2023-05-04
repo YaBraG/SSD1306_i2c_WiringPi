@@ -29,6 +29,6 @@ void main() {
 	// delay(5000);
 
 	ssd1306_clearDisplay();
-	ssd1306_drawString("MDC Roboitcs");
+	ssd1306_drawString("MDC Robotics");
 	ssd1306_display();
 }
