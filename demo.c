@@ -26,4 +26,8 @@ void main() {
 	ssd1306_fillRect(10,10, 50, 20, WHITE);
 	ssd1306_fillRect(80, 10, 130, 50, WHITE);
 	ssd1306_display();
+	delay(5000);
+
+	ssd1306_clearDisplay();
+	ssd1306_display();
 }
