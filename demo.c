@@ -13,7 +13,7 @@ Demo for ssd1306 i2c driver for  Raspberry Pi
 #include <unistd.h>
 #include <arpa/inet.h>
 
-string getIPAddress(){
+void getIPAddress(){
     string ipAddress="Unable to get IP Address";
     struct ifaddrs *interfaces = NULL;
     struct ifaddrs *temp_addr = NULL;
