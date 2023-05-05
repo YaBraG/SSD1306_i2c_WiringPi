@@ -40,19 +40,19 @@ string getIPAddress(){
 
 void main() {
 
-	
+	string ips = getIPAddress();
 
 	ssd1306_begin(SSD1306_SWITCHCAPVCC, SSD1306_I2C_ADDRESS);
 
 	ssd1306_display(); //Adafruit logo is visible
 	ssd1306_clearDisplay();
-	delay(5000);
+	delay(2500);
 
-	char text[100];
-	sprintf(text, "1306 %dx%d\ni2c driver\nwith wiringPi", WIDTH, HEIGHT);
-	ssd1306_drawString(text);
-	ssd1306_display();
-	delay(5000);
+	// char text[100];
+	// sprintf(text, "1306 %dx%d\ni2c driver\nwith wiringPi", WIDTH, HEIGHT);
+	// ssd1306_drawString(text);
+	// ssd1306_display();
+	// delay(5000);
 
 	// ssd1306_dim(1);
 	// ssd1306_startscrollright(00,0xFF);
@@ -65,6 +65,6 @@ void main() {
 	// delay(5000);
 
 	ssd1306_clearDisplay();
-	ssd1306_drawString(ipAddress);
+	ssd1306_drawString(ips);
 	ssd1306_display();
 }
