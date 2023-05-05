@@ -33,7 +33,7 @@ void main() {
     
 
 	char text[100];
-    sprintf(text, "IP Address is %s - %s\n" , inet_ntoa(( (struct sockaddr_in *)&ifr.ifr_addr )->sin_addr) );
+    sprintf(text, "IP Address is %s\n" , inet_ntoa(( (struct sockaddr_in *)&ifr.ifr_addr )->sin_addr) );
 
 	ssd1306_begin(SSD1306_SWITCHCAPVCC, SSD1306_I2C_ADDRESS);
 
