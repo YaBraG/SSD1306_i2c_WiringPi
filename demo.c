@@ -38,7 +38,7 @@ void main() {
 
 	ssd1306_display(); //Adafruit logo is visible
 	ssd1306_clearDisplay();
-	delay(5000);
+	delay(1000);
 
 	// char text[100];
 	// sprintf(text, "1306 %dx%d\ni2c driver\nwith wiringPi", WIDTH, HEIGHT);
