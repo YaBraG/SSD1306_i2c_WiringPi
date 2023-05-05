@@ -13,34 +13,33 @@ Demo for ssd1306 i2c driver for  Raspberry Pi
 #include <sys/ioctl.h>
 #include <netinet/in.h>
 #include <net/if.h>
-
+#include <unistd.h>
+#include <arpa/inet.h>
 
 
 void main() {
 
-	 int fd;
+	 int n;
     struct ifreq ifr;
-
-    fd = socket(AF_INET, SOCK_DGRAM, 0);
-    
-    /* I want to get an IPv4 IP address */
+    char array[] = "eth0";
+ 
+    n = socket(AF_INET, SOCK_DGRAM, 0);
+    //Type of address to retrieve - IPv4 IP address
     ifr.ifr_addr.sa_family = AF_INET;
+    //Copy the interface name in the ifreq structure
+    strncpy(ifr.ifr_name , array , IFNAMSIZ - 1);
+    ioctl(n, SIOCGIFADDR, &ifr);
+    close(n);
     
-    /* I want IP address attached to "eth0" */
-    strncpy(ifr.ifr_name, "eth0", IFNAMSIZ-1);
-    
-    ioctl(fd, SIOCGIFADDR, &ifr);
-    
-    close(fd);
 
 	char text[100];
-    sprintf(text, "%s\n", inet_ntoa(((struct sockaddr_in *)&ifr.ifr_addr)->sin_addr));
+    sprintf(text, "IP Address is %s - %s\n" , array , inet_ntoa(( (struct sockaddr_in *)&ifr.ifr_addr )->sin_addr) );
 
 	ssd1306_begin(SSD1306_SWITCHCAPVCC, SSD1306_I2C_ADDRESS);
 
 	ssd1306_display(); //Adafruit logo is visible
 	ssd1306_clearDisplay();
-	delay(5000);
+	delay(1000);
 
 	// char text[100];
 	// sprintf(text, "1306 %dx%d\ni2c driver\nwith wiringPi", WIDTH, HEIGHT);
