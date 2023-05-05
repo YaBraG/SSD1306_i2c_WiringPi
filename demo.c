@@ -13,19 +13,34 @@ Demo for ssd1306 i2c driver for  Raspberry Pi
 #include <unistd.h>
 #include <arpa/inet.h>
 
+string getIPAddress(){
+    string ipAddress="Unable to get IP Address";
+    struct ifaddrs *interfaces = NULL;
+    struct ifaddrs *temp_addr = NULL;
+    int success = 0;
+    // retrieve the current interfaces - returns 0 on success
+    success = getifaddrs(&interfaces);
+    if (success == 0) {
+        // Loop through linked list of interfaces
+        temp_addr = interfaces;
+        while(temp_addr != NULL) {
+            if(temp_addr->ifa_addr->sa_family == AF_INET) {
+                // Check if interface is en0 which is the wifi connection on the iPhone
+                if(strcmp(temp_addr->ifa_name, "en0")){
+                    ipAddress=inet_ntoa(((struct sockaddr_in*)temp_addr->ifa_addr)->sin_addr);
+                }
+            }
+            temp_addr = temp_addr->ifa_next;
+        }
+    }
+    // Free memory
+    freeifaddrs(interfaces);
+    return ipAddress;
+}
+
 void main() {
 
-	int n;
-    struct ifreq ifr;
-    char array[] = "eth0";
- 
-    n = socket(AF_INET, SOCK_DGRAM, 0);
-    //Type of address to retrieve - IPv4 IP address
-    ifr.ifr_addr.sa_family = AF_INET;
-    //Copy the interface name in the ifreq structure
-    strncpy(ifr.ifr_name , array , IFNAMSIZ - 1);
-    ioctl(n, SIOCGIFADDR, &ifr);
-    close(n);
+	
 
 	ssd1306_begin(SSD1306_SWITCHCAPVCC, SSD1306_I2C_ADDRESS);
 
@@ -50,6 +65,6 @@ void main() {
 	// delay(5000);
 
 	ssd1306_clearDisplay();
-	ssd1306_drawString("IP Address is %s - %s\n" , array , inet_ntoa(( (struct sockaddr_in *)&ifr.ifr_addr )->sin_addr));
+	ssd1306_drawString(ipAddress);
 	ssd1306_display();
 }
