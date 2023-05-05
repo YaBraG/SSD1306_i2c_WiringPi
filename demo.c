@@ -57,6 +57,6 @@ void main() {
 	// delay(5000);
 
 	ssd1306_clearDisplay();
-	ssd1306_drawString(inet_ntoa(((struct sockaddr_in *)&ifr.ifr_addr)->sin_addr));
+	ssd1306_drawString(AF_INET);
 	ssd1306_display();
 }
