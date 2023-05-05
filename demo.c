@@ -31,7 +31,7 @@ void main() {
     
     ioctl(fd, SIOCGIFADDR, &ifr);
     
-    pclose(fd);
+    close(fd);
     
 
 	ssd1306_begin(SSD1306_SWITCHCAPVCC, SSD1306_I2C_ADDRESS);
