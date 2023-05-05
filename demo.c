@@ -32,13 +32,15 @@ void main() {
     ioctl(fd, SIOCGIFADDR, &ifr);
     
     close(fd);
-    
+
+	char text[100];
+    sprintf(text, "%s\n", inet_ntoa(((struct sockaddr_in *)&ifr.ifr_addr)->sin_addr));
 
 	ssd1306_begin(SSD1306_SWITCHCAPVCC, SSD1306_I2C_ADDRESS);
 
 	ssd1306_display(); //Adafruit logo is visible
 	ssd1306_clearDisplay();
-	delay(1000);
+	delay(5000);
 
 	// char text[100];
 	// sprintf(text, "1306 %dx%d\ni2c driver\nwith wiringPi", WIDTH, HEIGHT);
@@ -57,6 +59,6 @@ void main() {
 	// delay(5000);
 
 	ssd1306_clearDisplay();
-	ssd1306_drawString(AF_INET);
+	ssd1306_drawString(text);
 	ssd1306_display();
 }
