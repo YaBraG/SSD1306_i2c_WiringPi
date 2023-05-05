@@ -31,7 +31,7 @@ void main() {
     
     ioctl(fd, SIOCGIFADDR, &ifr);
     
-    close(fd);
+    pclose(fd);
     
 
 	ssd1306_begin(SSD1306_SWITCHCAPVCC, SSD1306_I2C_ADDRESS);
@@ -57,6 +57,6 @@ void main() {
 	// delay(5000);
 
 	ssd1306_clearDisplay();
-	ssd1306_drawString("%s\n", inet_ntoa(((struct sockaddr_in *)&ifr.ifr_addr)->sin_addr));
+	ssd1306_drawString(inet_ntoa(((struct sockaddr_in *)&ifr.ifr_addr)->sin_addr));
 	ssd1306_display();
 }
